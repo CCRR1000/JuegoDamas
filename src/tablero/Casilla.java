@@ -39,16 +39,5 @@ public class Casilla {
         this.oscuro = oscuro;
     }
 
-    
-/* 
-    public String getCasillaRoja(char caracter) {
-        return fRojo+negro+" "+caracter+" "+reset;
-    }
-
-    public String getCasillaGris(char caracter) {
-        return fGris+negro+" "+caracter+" "+reset;
-    }
-   */  
-
 
 }

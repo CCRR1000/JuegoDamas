@@ -2,6 +2,7 @@ package src.juego;
 
 import src.jugadores.Jugador;
 import src.jugadores.TablaJugadores;
+import src.tablero.Casilla;
 import src.tablero.Tablero;
 
 public class Partida {
@@ -54,6 +55,22 @@ public class Partida {
         tablero.inicializarTablero();
         tablero.mostrarTablero();
         System.out.println();
+
+
+        Casilla tableroPartida[][] = tablero.getCasillas();
+
+        realizarMovimiento(tableroPartida[5][1], tableroPartida[4][2]);
+        tablero.mostrarTablero();
+
+        realizarMovimiento(tableroPartida[2][2], tableroPartida[3][3]);
+        tablero.mostrarTablero();
+    }
+
+    public void realizarMovimiento(Casilla actual, Casilla finall) {
+
+        finall.setCaracter(actual.getCaracter());
+        actual.setCaracter(' ');
+        
     }
 
 }
