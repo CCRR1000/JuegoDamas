@@ -2,6 +2,8 @@ package src.jugadores;
 
 import java.util.Scanner;
 
+import src.principal.LecturaDatos;
+
 public class TablaJugadores {
  
     private final int MAXIMO_JUGADORES = 5;
@@ -15,8 +17,8 @@ public class TablaJugadores {
     public void ingresarJugador() {
 
         if (ultimoJugador < MAXIMO_JUGADORES) {
-            System.out.print("\n  Escriba el nombre del jugador: ");
-            jugadores[ultimoJugador] = new Jugador(scan.nextLine());
+            
+            jugadores[ultimoJugador] = new Jugador(LecturaDatos.leerTexto("\n  Escriba el nombre del jugador: "));
             ultimoJugador++;
 
         } else {
@@ -71,8 +73,7 @@ public class TablaJugadores {
 
         mostrarJugadores();
 
-        System.out.print("\n  Escriba el numero del jugador: ");
-        int num = Integer.parseInt(scan.nextLine());
+        int num = LecturaDatos.leerEntero("\n  Escriba el numero del jugador: ");
 
         return jugadores[num-1];
     }
