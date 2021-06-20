@@ -3,7 +3,7 @@ package src.tablero;
 public class Tablero {
     
     private Casilla casillas[][] = new Casilla[8][8];
-    private String[] letras = {" a "," b "," c "," d "," e "," f "," g "," h "};
+    private char[] letras = {'a','b','c','d','e','f','g','h'};
 
     public Tablero() {
 
@@ -56,10 +56,21 @@ public class Tablero {
 
         System.out.print("       ");
         for (int i = 0; i < letras.length; i++) {
-            System.out.print(letras[i]);
+            System.out.print(" "+letras[i]+" ");
         }
         System.out.println();
 
+    }
+
+    public int buscarIndiceLetras(char letra) {
+        int indice = 9;
+        for (int i = 0; i < letras.length; i++) {
+            if (letra == letras[i]) {
+                indice = i;
+                break;
+            }
+        }
+        return indice;
     }
 
     public Casilla[][] getCasillas() {
