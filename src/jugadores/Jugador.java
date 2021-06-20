@@ -3,8 +3,10 @@ package src.jugadores;
 public class Jugador {
     
     private String nombre;
-    private int partidasGanadas, partidasPerdidas, puntuacion;
+    private int partidasGanadas, partidasPerdidas, puntuacion, fichasTablero;
     
+
+
     public Jugador(String nombre) {
         this.nombre = nombre;
     }
@@ -45,6 +47,13 @@ public class Jugador {
         this.puntuacion = puntuacion;
     }
 
+    public int getFichasTablero() {
+        return fichasTablero;
+    }
+
+    public void setFichasTablero(int fichasTablero) {
+        this.fichasTablero = fichasTablero;
+    }
 
     
 
