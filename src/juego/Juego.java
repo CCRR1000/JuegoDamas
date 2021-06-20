@@ -3,6 +3,7 @@ package src.juego;
 import java.util.Scanner;
 
 import src.jugadores.TablaJugadores;
+import src.principal.LecturaDatos;
 
 public class Juego {
 
@@ -23,8 +24,7 @@ public class Juego {
             System.out.println("   3. Mostrar Jugadores.");
             System.out.println("   4. Tabla de Posiciones.");
             System.out.println("   5. Salir");
-            System.out.print("\n   Escriba el numero de la opcion que elige: ");
-            opcion = Integer.parseInt(scan.nextLine());
+            opcion = LecturaDatos.leerEntero("\n   Escriba el numero de la opcion que elige: ");
 
             switch (opcion) {
                 case 1:
