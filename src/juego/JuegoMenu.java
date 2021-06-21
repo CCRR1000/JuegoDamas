@@ -5,14 +5,14 @@ import java.util.Scanner;
 import src.jugadores.TablaJugadores;
 import src.principal.LecturaDatos;
 
-public class Juego {
+public class JuegoMenu {
 
     Scanner scan = new Scanner(System.in);
     TablaJugadores tJugadores = new TablaJugadores();
     Partida partida;
 
 
-    public Juego() {
+    public JuegoMenu() {
 
         int opcion = 0;
 

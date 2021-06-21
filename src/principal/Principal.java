@@ -1,9 +1,9 @@
 package src.principal;
 
-import src.juego.Juego;
+import src.juego.JuegoMenu;
 
 public class Principal {
     public static void main(String[] args) {
-        Juego juego = new Juego();
+        JuegoMenu juego = new JuegoMenu();
     }
 }
