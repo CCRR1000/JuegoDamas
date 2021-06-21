@@ -56,8 +56,11 @@ public class Partida {
                     } else {
                         jugador1.setSimbolo('O');
                         jugador2.setSimbolo('X');
+                        Jugador aux = jugador1;
+                        jugador1 = jugador2;
+                        jugador2 = aux;
                     }
-                    
+
                     crearPartida(jugador1, jugador2);
                     mismoJugador = false;
 
@@ -73,13 +76,13 @@ public class Partida {
 
         tablero = new Tablero();
         System.out.println();
-        tablero.inicializarTablero();
+        tablero.inicializarTablero(jugador1, jugador2);
         tablero.mostrarTablero();
         System.out.println();
 
         tableroPartida = tablero.getCasillas();
 
-       manejarTurnos(jugador1, jugador2);
+        manejarTurnos(jugador1, jugador2);
 
         /*
          * realizarMovimiento(tableroPartida[5][1], tableroPartida[4][2]);
@@ -90,67 +93,69 @@ public class Partida {
          */
     }
 
-    public void turno(Jugador jugador, int numJugador) {
+    public boolean turno(Jugador jugador, int numJugador, Jugador otroJugador) {
 
         // primero elige la casilla inicial y la final
 
         int colIn = 0, filaIn = 0, colFn = 0, filaFn = 0;
-        boolean movimientoValido=false;
+        boolean movimientoValido = false;
 
         do {
             System.out.println("\n  Turno de " + jugador.getNombre() + ":");
 
-            System.out.println("\n  (Si quieres salir escribe 'no')");
+            System.out.println(
+                    "\n  (Si quieres salir escribe 'no', se eliminaran todas tus fichas del tablero y perderas)");
             String ficha = LecturaDatos.leerTexto("  Elige la ficha a mover (a1): ");
-            
-            colIn = tablero.buscarIndiceLetras(ficha.charAt(0));
-            filaIn = Character.getNumericValue(ficha.charAt(1)) - 1;
-    
-            ficha = LecturaDatos.leerTexto("  Elige la casilla a la que moveras: ");
-            colFn = tablero.buscarIndiceLetras(ficha.charAt(0));
-            filaFn = Character.getNumericValue(ficha.charAt(1)) - 1;
-    
-            boolean sePuede = rectificarCeldas(filaIn, colIn, filaFn, colFn, jugador);
-    
-            if (sePuede) {
-                movimientoValido = comprobarMovimiento(filaIn, colIn, filaFn, colFn, jugador, numJugador);
-                if (movimientoValido) {
-                    realizarMovimiento(tableroPartida[filaIn][colIn], tableroPartida[filaFn][colFn]);
-                    tablero.mostrarTablero();
-                    
+
+            if (ficha.equalsIgnoreCase("no")) {
+                if (jugador.getFichasTablero() > otroJugador.getFichasTablero()) {
+                    otroJugador.setFichasTablero(0);
+                    return false;
+                } else {
+                    jugador.setFichasTablero(0);
+                    return false;
+                }
+
+            } else {
+                colIn = tablero.buscarIndiceLetras(ficha.charAt(0));
+                filaIn = Character.getNumericValue(ficha.charAt(1)) - 1;
+
+                ficha = LecturaDatos.leerTexto("  Elige la casilla a la que moveras: ");
+                colFn = tablero.buscarIndiceLetras(ficha.charAt(0));
+                filaFn = Character.getNumericValue(ficha.charAt(1)) - 1;
+
+                boolean sePuede = rectificarCeldas(filaIn, colIn, filaFn, colFn, jugador);
+
+                if (sePuede) {
+                    movimientoValido = comprobarMovimiento(filaIn, colIn, filaFn, colFn, jugador, numJugador);
+                    if (movimientoValido) {
+                        realizarMovimiento(tableroPartida[filaIn][colIn], tableroPartida[filaFn][colFn]);
+                        tablero.mostrarTablero();
+                    } else {
+                        System.out.println("\n  Movimiento no valido");
+                    }
                 } else {
                     System.out.println("\n  Movimiento no valido");
                 }
-            } else {
-                System.out.println("\n  Movimiento no valido");
             }
-    
+
         } while (movimientoValido == false);
 
-
-        //realizarMovimiento(tableroPartida[filaIn][colIn], tableroPartida[filaFn][colFn]);
-        //tablero.mostrarTablero();
-
-        // revisar si la casilla inicial tiene letra
-
-        // revisar si es x ^ o
-
-        // revisar si la casilla final está vacia
-
-        // comprobar si se puede hacer el movimiento
+        return true;
 
     }
 
     public boolean rectificarCeldas(int filaInicial, int columnaInicial, int filaFin, int columnaFin, Jugador jugador) {
         boolean sePudo = false;
-        if (columnaInicial >= 0 && filaInicial >= 0 && filaInicial < 8 && columnaFin >= 0 && filaFin >= 0 && filaFin < 8) {
+        if (columnaInicial >= 0 && filaInicial >= 0 && filaInicial < 8 && columnaFin >= 0 && filaFin >= 0
+                && filaFin < 8) {
 
             if (tableroPartida[filaInicial][columnaInicial].getCaracter() != ' ') {
 
                 if (tableroPartida[filaInicial][columnaInicial].getCaracter() == jugador.getSimbolo()) {
-                    
+
                     if (tableroPartida[filaFin][columnaFin].getCaracter() == ' ') {
-                        
+
                         sePudo = true;
 
                     } else {
@@ -162,36 +167,38 @@ public class Partida {
             } else {
                 System.out.println("\n  La celda inicial esta vacia");
             }
-        }
-        else {
+        } else {
             System.out.println("\n  Error. No puedes elegir una celda fuera del tablero.");
         }
         return sePudo;
     }
 
-    public boolean comprobarMovimiento(int filaInicial, int columnaInicial, int filaFin, int columnaFin, Jugador jugador, int numJugador) {
+    public boolean comprobarMovimiento(int filaInicial, int columnaInicial, int filaFin, int columnaFin,
+            Jugador jugador, int numJugador) {
 
         boolean movimientoValido = false;
 
         // Movimiento simple
-        if(columnaFin == (columnaInicial+1) || columnaFin == (columnaInicial-1)) {
-            if (numJugador==1 && filaFin == (filaInicial+1)) {
+        if (columnaFin == (columnaInicial + 1) || columnaFin == (columnaInicial - 1)) {
+            if (numJugador == 1 && filaFin == (filaInicial + 1)) {
                 movimientoValido = true;
-            } else if (numJugador==2 && filaFin == (filaInicial-1)) {
+            } else if (numJugador == 2 && filaFin == (filaInicial - 1)) {
                 movimientoValido = true;
             } else {
                 System.out.println("\n  Movimiento no valido");
             }
-        
+
             // Movimiento con salto
-        } else if (columnaFin == (columnaInicial+2) || columnaFin == (columnaInicial-2)) {
-            if (numJugador==1 && filaFin == (filaInicial+2)) {
+        } else if (columnaFin == (columnaInicial + 2) || columnaFin == (columnaInicial - 2)) {
+            if (numJugador == 1 && filaFin == (filaInicial + 2)) {
                 // comprobar si hay algo para comer
-                if (columnaFin == (columnaInicial+2) && tableroPartida[filaInicial+1][columnaInicial+1].getCaracter()=='O') {
-                    tableroPartida[filaInicial+1][columnaInicial+1].setCaracter(' ');
+                if (columnaFin == (columnaInicial + 2)
+                        && tableroPartida[filaInicial + 1][columnaInicial + 1].getCaracter() == 'O') {
+                    tableroPartida[filaInicial + 1][columnaInicial + 1].setCaracter(' ');
                     movimientoValido = true;
-                } else if (columnaFin == (columnaInicial-2) && tableroPartida[filaInicial+1][columnaInicial-1].getCaracter()=='O') {
-                    tableroPartida[filaInicial+1][columnaInicial-1].setCaracter(' ');
+                } else if (columnaFin == (columnaInicial - 2)
+                        && tableroPartida[filaInicial + 1][columnaInicial - 1].getCaracter() == 'O') {
+                    tableroPartida[filaInicial + 1][columnaInicial - 1].setCaracter(' ');
                     movimientoValido = true;
                 } else {
                     System.out.println("\n  Movimiento no valido");
@@ -199,12 +206,14 @@ public class Partida {
 
                 // comer comer
                 movimientoValido = true;
-            } else if (numJugador==2 && filaFin == (filaInicial-2)) {
-                if (columnaFin == (columnaInicial+2) && tableroPartida[filaInicial-1][columnaInicial+1].getCaracter()=='X') {
-                    tableroPartida[filaInicial-1][columnaInicial+1].setCaracter(' ');
+            } else if (numJugador == 2 && filaFin == (filaInicial - 2)) {
+                if (columnaFin == (columnaInicial + 2)
+                        && tableroPartida[filaInicial - 1][columnaInicial + 1].getCaracter() == 'X') {
+                    tableroPartida[filaInicial - 1][columnaInicial + 1].setCaracter(' ');
                     movimientoValido = true;
-                } else if (columnaFin == (columnaInicial-2) && tableroPartida[filaInicial-1][columnaInicial-1].getCaracter()=='X') {
-                    tableroPartida[filaInicial-1][columnaInicial-1].setCaracter(' ');
+                } else if (columnaFin == (columnaInicial - 2)
+                        && tableroPartida[filaInicial - 1][columnaInicial - 1].getCaracter() == 'X') {
+                    tableroPartida[filaInicial - 1][columnaInicial - 1].setCaracter(' ');
                     movimientoValido = true;
                 } else {
                     System.out.println("\n  Movimiento no valido");
@@ -221,28 +230,39 @@ public class Partida {
 
     public void manejarTurnos(Jugador jugador1, Jugador jugador2) {
         // hacer condicion
-        boolean ganador = false;
+        boolean ganador = false, continuarTurno;
         do {
-            turno(jugador1, 1);
-            tablero.contadorFichas(jugador1, jugador2);
-            turno(jugador2, 2);
-            tablero.contadorFichas(jugador1, jugador2);
+            continuarTurno = turno(jugador1, 1, jugador2);
 
-            if (jugador1.getFichasTablero()==0 || jugador2.getFichasTablero()==0) {
-                if (jugador1.getFichasTablero()==0) {
-                    jugador2.setPartidasGanadas(jugador2.getPartidasGanadas()+1);
-                    jugador2.setPuntuacion(jugador2.getPuntuacion()+3);
-                    jugador1.setPartidasPerdidas(jugador1.getPartidasPerdidas()+1);
+            if (continuarTurno == true) {
+                tablero.contadorFichas(jugador1, jugador2);
+                continuarTurno = turno(jugador2, 2, jugador1);
+                tablero.contadorFichas(jugador1, jugador2);
 
-                    System.out.println("\n  EL GANADOR ES: "+jugador2.getNombre());
+                if (continuarTurno) {
+                    jugador2.setFichasTablero(0);
+                }
+            } else {
+                jugador1.setFichasTablero(0);
+            }
+            
+            if (jugador1.getFichasTablero() == 0 || jugador2.getFichasTablero() == 0) {
+                if (jugador1.getFichasTablero() == 0) {
+                    jugador2.setPartidasGanadas(jugador2.getPartidasGanadas() + 1);
+                    jugador2.setPuntuacion(jugador2.getPuntuacion() + 3);
+                    jugador1.setPartidasPerdidas(jugador1.getPartidasPerdidas() + 1);
+
+                    System.out.println("\n  EL GANADOR ES: " + jugador2.getNombre());
                     ganador = true;
-                } else if (jugador2.getFichasTablero()==0) {
-                    jugador1.setPartidasGanadas(jugador2.getPartidasGanadas()+1);
-                    jugador1.setPuntuacion(jugador2.getPuntuacion()+3);
-                    jugador2.setPartidasPerdidas(jugador1.getPartidasPerdidas()+1);
+                } else if (jugador2.getFichasTablero() == 0) {
+                    jugador1.setPartidasGanadas(jugador1.getPartidasGanadas() + 1);
+                    jugador1.setPuntuacion(jugador1.getPuntuacion() + 3);
+                    jugador2.setPartidasPerdidas(jugador2.getPartidasPerdidas() + 1);
 
-                    System.out.println("\n  EL GANADOR ES: "+jugador1.getNombre());
+                    System.out.println("\n  EL GANADOR ES: " + jugador1.getNombre());
                     ganador = true;
+                } else {
+                    System.out.println("\n  EMPATE");
                 }
             }
 
