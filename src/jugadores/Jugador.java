@@ -4,7 +4,7 @@ public class Jugador {
     
     private String nombre;
     private int partidasGanadas, partidasPerdidas, puntuacion, fichasTablero;
-    
+    private char simbolo;
 
 
     public Jugador(String nombre) {
@@ -53,6 +53,14 @@ public class Jugador {
 
     public void setFichasTablero(int fichasTablero) {
         this.fichasTablero = fichasTablero;
+    }
+
+    public char getSimbolo() {
+        return simbolo;
+    }
+
+    public void setSimbolo(char simbolo) {
+        this.simbolo = simbolo;
     }
 
     

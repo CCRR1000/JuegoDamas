@@ -63,7 +63,7 @@ public class Tablero {
     }
 
     public int buscarIndiceLetras(char letra) {
-        int indice = 9;
+        int indice = -1;
         for (int i = 0; i < letras.length; i++) {
             if (letra == letras[i]) {
                 indice = i;

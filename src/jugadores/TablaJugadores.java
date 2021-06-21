@@ -6,7 +6,7 @@ import src.principal.LecturaDatos;
 
 public class TablaJugadores {
  
-    private final int MAXIMO_JUGADORES = 5;
+    private final int MAXIMO_JUGADORES = 10;
     private Jugador[] jugadores = new Jugador[MAXIMO_JUGADORES];
     Scanner scan = new Scanner(System.in);
     private int ultimoJugador=0;
