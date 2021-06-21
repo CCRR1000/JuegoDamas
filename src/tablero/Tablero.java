@@ -11,7 +11,7 @@ public class Tablero {
 
     }
 
-    public void inicializarTablero() {
+    public void inicializarTablero(Jugador jugador1, Jugador jugador2) {
 
         for (int i = 0; i < casillas.length; i++) {
             for (int j = 0; j < casillas.length; j++) {
@@ -24,11 +24,11 @@ public class Tablero {
                 }
 
                 if (i<3 && casillas[i][j].isOscuro()) {
-                    casillas[i][j].setCaracter('X');
+                    casillas[i][j].setCaracter(jugador1.getSimbolo());
                 } 
 
                 if (i>4 && casillas[i][j].isOscuro()) {
-                    casillas[i][j].setCaracter('O');
+                    casillas[i][j].setCaracter(jugador2.getSimbolo());
                 }
                 
             }
@@ -76,6 +76,9 @@ public class Tablero {
     }
 
     public void contadorFichas(Jugador jugador1, Jugador jugador2) {
+        jugador1.setFichasTablero(0);
+        jugador2.setFichasTablero(0);
+        
         for (int i = 0; i < casillas.length; i++) {
             for (int j = 0; j < casillas.length; j++) {
 
