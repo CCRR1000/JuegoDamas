@@ -102,5 +102,43 @@ public class Tablero {
         this.casillas = casillas;
     }
 
-    
+    public int[] rectificarCelda(String ficha, Jugador jugador, boolean esInicial) {
+
+        int columna = buscarIndiceLetras(ficha.charAt(0));
+        int fila = Character.getNumericValue(ficha.charAt(1)) - 1;
+        int[] indices = {fila, columna}, wrong = {-1, -1};
+
+        if (columna < 0 || fila < 0 || fila > 7) {
+            System.out.println("\n  La celda se sale del tablero");
+            return wrong;
+        }
+
+        if (esInicial) {
+
+            if (casillas[fila][columna].getCaracter() == ' ') {
+                System.out.println("\n  La celda inicial esta vacia");
+                return wrong;
+            } else if (casillas[fila][columna].getCaracter() != jugador.getSimbolo()) {
+                System.out.println("\n  La ficha que elegiste no es tuya");
+                return wrong;
+            } else {
+                return indices;
+            }
+
+        }
+        else {
+
+            if (casillas[fila][columna].getCaracter() != ' ') {
+                System.out.println("\n  La celda ya esta ocupada");
+                return wrong;
+            } else {
+                return indices;
+            }
+
+        }
+        
+    }
+
+
+
 }
